@@ -1,0 +1,12 @@
+**/node_modules/
+**/.next/
+**/.env*
+!**/.env.example
+**/*.log
+**/*.tsbuildinfo
+**/installer/payload/
+**/installer/out/
+fct/data/*.json
+*.xlsx
+*.xls
+*.msg
