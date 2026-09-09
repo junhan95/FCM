@@ -5,7 +5,11 @@ import { resolveSession } from '@/lib/auth/session'
 import { closePools } from '@/db'
 import { makeUser, siteIds, TEST_PASSWORD } from './helpers'
 let FRK: string
-beforeAll(async () => { FRK = (await siteIds()).FRK })
+beforeAll(async () => {
+  const id = (await siteIds()).FRK
+  if (!id) throw new Error('FRK fixture is missing; initialize the test database first.')
+  FRK = id
+})
 afterAll(closePools)
 describe('Portal ID/password login', () => {
   it('selects an authorized site without accepting a site from the browser', async () => {
