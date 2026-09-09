@@ -1,33 +1,9 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="referrer" content="no-referrer">
-  <title>Frankonia · FCT</title>
-  <link rel="stylesheet" href="style.css?v=2">
-</head>
-<body>
-  <header><img src="frankonia-logo.svg" alt="Frankonia"><div class="header-tools"><span>CALCULATION TABLE</span><nav class="languages" aria-label="Language"><button type="button" data-lang="en" lang="en" aria-pressed="true">English</button><button type="button" data-lang="ko" lang="ko" aria-pressed="false">한국어</button></nav></div></header>
-  <main>
-    <p class="eyebrow">FRANKONIA WORKSPACE / FCT</p>
-    <h1><span data-i18n="headline1">Continue your</span><br><span data-i18n="headline2">quotation.</span></h1>
-    <p class="intro"><span data-i18n="intro1">From chamber configuration to your final quote.</span><br><span data-i18n="intro2">Connect to Frankonia Calculation Table running on this PC.</span></p>
-    <section class="launch" aria-labelledby="launch-title">
-      <div><p class="eyebrow">LOCAL APPLICATION</p><h2 id="launch-title">Frankonia Calculation Table</h2><p><span data-i18n="local">The app and database run locally on this PC.</span></p></div>
-      <a id="open-app" class="button" href="http://127.0.0.1:3000/" rel="noreferrer"><span data-i18n="open">Open FCT</span> <span aria-hidden="true">↗</span></a>
-    </section>
-    <section class="instructions" aria-labelledby="help-title">
-      <h2 id="help-title"><span data-i18n="help">Before you connect</span></h2>
-      <ol>
-        <li><strong><span data-i18n="start">Start the local app</span></strong><p><span data-i18n="start1">Open Frankonia Calculation Table from your desktop. For the source version, run </span><code>start-fct.cmd</code><span data-i18n="start2">.</span></p></li>
-        <li><strong><span data-i18n="open">Open FCT</span></strong><p><span data-i18n="ready">Once the app is ready, use the button above to open it and sign in. This page cannot automatically start a program on your PC.</span></p></li>
-        <li><strong><span data-i18n="trouble">Having trouble connecting?</span></strong><p><span data-i18n="troubleText">Check that the app is running. If it uses a different port, update the port number below.</span></p></li>
-      </ol>
-      <form id="port-form"><label for="port"><span data-i18n="port">Local app port</span></label><div class="port-row"><input id="port" name="port" type="number" min="1024" max="65535" value="3000" required><button type="submit"><span data-i18n="apply">Apply</span></button></div><p id="address" aria-live="polite">Address: http://127.0.0.1:3000/</p></form>
-    </section>
-  </main>
-  <footer><span>FRANKONIA · FCT</span><p><span data-i18n="footer1">Quotation and pricing data are processed in the local app.</span><br><span data-i18n="footer2">To use FCT on another PC, install the app on that PC as well.</span></p></footer>
-  <script src="app.js?v=2"></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="origin"><title>FCM · Frankonia Customer Management</title><link rel="stylesheet" href="portal.css?v=3"></head>
+<body class="portal public-login">
+<header class="portal-header"><a href="https://www.frankonia-korea.com/" aria-label="Frankonia Korea"><img src="assets/logo.svg" alt="Frankonia"></a><span class="portal-brand">CUSTOMER MANAGEMENT</span><div class="portal-header-right"><a class="corporate-link" href="https://www.frankonia-korea.com/" target="_blank" rel="noreferrer">Frankonia Korea ↗</a><nav class="language-switch" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="ko" aria-pressed="false">KO</button></nav></div></header>
+<main class="login-hero"><div class="login-intro"><p class="portal-eyebrow">FRANKONIA CUSTOMER MANAGEMENT</p><h1><span data-i18n="headline1">CONNECTING CUSTOMERS.</span><br><em data-i18n="headline2">EMPOWERING</em> <span data-i18n="headline3">YOUR WORK.</span></h1><p data-i18n="intro">From customer communication to chamber quotations. Start your work in one Frankonia workspace.</p><div class="hero-caption">EMC TEST SOLUTIONS · ENGINEERED IN GERMANY SINCE 1987</div></div>
+<section class="login-panel"><p class="portal-eyebrow" data-i18n="authorized">AUTHORIZED PERSONNEL</p><h2 data-i18n="signin">Sign in</h2><p class="portal-muted" data-i18n="account">Use your existing FCM account.</p>
+<form id="login-form" action="http://127.0.0.1:3002/entry/login" method="post"><input id="login-lang" type="hidden" name="lang" value="en"><label for="loginId">ID</label><input id="loginId" name="loginId" autocomplete="username" required maxlength="128"><label for="password" data-i18n="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required maxlength="1024"><button class="portal-primary" type="submit"><span data-i18n="signin">Sign in</span> <span aria-hidden="true">→</span></button></form>
+<p class="login-footnote" data-i18n="after">After signing in, choose Customer Management or Calculation Table.</p><details class="connection-help"><summary data-i18n="connection">Local connection settings</summary><p data-i18n="help">Start start-frankonia.cmd on this PC before signing in. Your credentials are verified by the local FCM server.</p><form id="port-form"><label for="port" data-i18n="port">FCM server port</label><input id="port" type="number" min="1024" max="65535" value="3002" required><button class="portal-outline" type="submit" data-i18n="apply">Apply</button></form><p id="address" aria-live="polite">Sign-in server: http://127.0.0.1:3002</p></details></section></main>
+<footer class="portal-footer"><span>FRANKONIA · CUSTOMER MANAGEMENT</span><span data-i18n="footer">YOUR SECURE LOCAL WORKSPACE</span></footer><script src="login.js?v=3"></script></body></html>

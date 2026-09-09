@@ -11,6 +11,9 @@ const PUBLIC = ["/login", "/api/health"];
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (PUBLIC.some((p) => pathname === p || pathname.startsWith(p + "/"))) return NextResponse.next();
+  // The server-side getSession gate validates this token against FCM on every
+  // request. Cookie presence here is only a routing optimization.
+  if (process.env.FCM_BRIDGE_SECRET && request.cookies.has('fcm_session')) return NextResponse.next();
 
   const token = request.cookies.get("fct_session")?.value;
   let ok = false;

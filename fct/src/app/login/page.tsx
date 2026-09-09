@@ -3,10 +3,12 @@ import { makeT } from "@/lib/i18n";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import LoginForm from "./LoginForm";
+import { fcmOrigin } from '@/lib/fcm-session';
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const s = await getSession();
   if (s) redirect("/");
+  if (process.env.FCM_BRIDGE_SECRET) redirect(`${fcmOrigin()}/login`);
   const lang = await getLang();
   const t = makeT(lang);
   const { next } = await searchParams;

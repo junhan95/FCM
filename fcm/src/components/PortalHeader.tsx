@@ -1,0 +1,4 @@
+import { languageAction, signOut } from '@/app/workspace/actions'
+export default function PortalHeader({ lang, signedIn = false }: { lang: 'ko' | 'en'; signedIn?: boolean }) {
+  return <header className="portal-header"><a href={signedIn ? '/workspace' : '/login'} aria-label="Frankonia workspace"><img src="/assets/logo.svg" alt="Frankonia" /></a><span className="portal-brand">CUSTOMER MANAGEMENT</span><div className="portal-header-right"><a className="corporate-link" href="https://www.frankonia-korea.com/" target="_blank" rel="noreferrer">Frankonia Korea ↗</a><form action={languageAction} className="language-switch"><button name="lang" value="en" aria-pressed={lang === 'en'}>EN</button><button name="lang" value="ko" aria-pressed={lang === 'ko'}>KO</button></form>{signedIn && <form action={signOut}><button className="portal-outline">{lang === 'ko' ? '로그아웃' : 'Sign out'}</button></form>}</div></header>
+}

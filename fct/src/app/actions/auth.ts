@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { authenticate, createSessionToken, SESSION_COOKIE, getSession, hashPassword, checkPassword } from "@/lib/auth";
 import { query, queryOne } from "@/lib/db";
 import { audit } from "@/lib/data";
+import { fcmOrigin, revokeFcmSession } from '@/lib/fcm-session';
 
 export async function loginAction(_prev: { error?: string } | undefined, formData: FormData) {
   const username = String(formData.get("username") ?? "");
@@ -28,7 +29,11 @@ export async function logoutAction() {
   const s = await getSession();
   if (s) await audit(s.id, "LOGOUT");
   const store = await cookies();
+  const fcmToken = store.get('fcm_session')?.value;
+  if (fcmToken && process.env.FCM_BRIDGE_SECRET) await revokeFcmSession(fcmToken);
+  store.delete('fcm_session');
   store.delete(SESSION_COOKIE);
+  if (s?.authProvider === 'fcm') redirect(`${fcmOrigin()}/login`);
   redirect("/login");
 }
 
@@ -40,6 +45,7 @@ export async function setLangAction(lang: string) {
 export async function changePasswordAction(_prev: { error?: string; ok?: boolean } | undefined, formData: FormData) {
   const s = await getSession();
   if (!s) redirect("/login");
+  if (s.authProvider === 'fcm') return { error: 'managed' };
   const cur = String(formData.get("current") ?? "");
   const nw = String(formData.get("new") ?? "");
   if (nw.length < 6) return { error: "short" };

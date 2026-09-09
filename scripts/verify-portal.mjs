@@ -1,0 +1,36 @@
+// Run against the local development database and running integrated apps.
+// Uses the existing development-only FRK staff fixture; never sends email.
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const env = Object.fromEntries(fs.readFileSync(new URL('../fcm/.env', import.meta.url), 'utf8').split(/\r?\n/).filter(x => /^[A-Z_]+=/.test(x)).map(x => [x.slice(0,x.indexOf('=')),x.slice(x.indexOf('=')+1)]));
+const base = 'http://127.0.0.1:3002';
+const fct = 'http://127.0.0.1:3001';
+const loginId = process.env.PORTAL_TEST_ID ?? 'frk.staff';
+const password = process.env.PORTAL_TEST_PASSWORD ?? 'devonly-Passw0rd!';
+const post = origin => fetch(base+'/entry/login', { method:'POST', headers:{ Origin:origin, 'Content-Type':'application/x-www-form-urlencoded' }, body:new URLSearchParams({loginId,password,lang:'en'}),redirect:'manual' });
+assert.equal((await post('https://untrusted.example')).status,403);
+assert.equal((await post('null')).status,403);
+const result = await post('https://junhan95.github.io');
+assert.equal(result.status,303);
+assert.equal(result.headers.get('location'),base+'/workspace');
+const cookie = result.headers.getSetCookie().find(x=>x.startsWith('fcm_session='));
+assert(cookie?.includes('HttpOnly'));
+assert(cookie?.includes('SameSite=lax'));
+const token = cookie.split(';')[0].slice('fcm_session='.length);
+const headers = {Cookie:'fcm_session='+token};
+const workspace = await fetch(base+'/workspace',{headers});
+assert.equal(workspace.status,200);
+assert((await workspace.text()).includes('Calculation Table'));
+const settings = await fetch(base+'/workspace/fct',{headers});
+assert.equal(settings.status,200);
+assert((await settings.text()).includes('FCT display language'));
+const api = await fetch(fct+'/api/engine-data',{headers});
+assert.equal(api.status,200);
+const body=await api.json(); assert(body.template && body.prices);
+assert.equal((await fetch(base+'/api/integration/session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})})).status,401);
+assert.equal((await fetch(fct+'/api/engine-data')).status,401);
+const logout = await fetch(base+'/api/integration/session',{method:'POST',headers:{Authorization:'Bearer '+env.FCM_BRIDGE_SECRET,'Content-Type':'application/json'},body:JSON.stringify({token,action:'logout'})});
+assert.equal(logout.status,200);
+assert.equal((await fetch(fct+'/api/engine-data',{headers})).status,401);
+assert.equal((await fetch(base+'/workspace',{headers,redirect:'manual'})).status,307);
+console.log('PASS: origin restrictions, Pages login, loopback redirect, HttpOnly session, protected menu/settings, FCT SSO, bridge secret check, logout revocation.');

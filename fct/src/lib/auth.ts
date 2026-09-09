@@ -3,6 +3,8 @@ import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { query, queryOne } from "./db";
+import { cache } from 'react';
+import { resolveFcmSession, fcmOrigin } from './fcm-session';
 
 export type Role = "ADMIN" | "USER";
 export interface SessionUser {
@@ -10,6 +12,7 @@ export interface SessionUser {
   username: string;
   name: string;
   role: Role;
+  authProvider?: 'fcm';
 }
 
 export const SESSION_COOKIE = "fct_session";
@@ -45,8 +48,10 @@ export async function verifySessionToken(token: string): Promise<SessionUser | n
 }
 
 /** 현재 로그인 사용자 (없으면 null) */
-export async function getSession(): Promise<SessionUser | null> {
+export const getSession = cache(async (): Promise<SessionUser | null> => {
   const store = await cookies();
+  const fcm = store.get('fcm_session')?.value;
+  if (process.env.FCM_BRIDGE_SECRET) return fcm ? resolveFcmSession(fcm) : null;
   const token = store.get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const s = await verifySessionToken(token);
@@ -58,11 +63,11 @@ export async function getSession(): Promise<SessionUser | null> {
   );
   if (!u || !u.active) return null;
   return { ...s, role: u.role, name: u.name };
-}
+});
 
 export async function requireSession(): Promise<SessionUser> {
   const s = await getSession();
-  if (!s) redirect("/login");
+  if (!s) redirect(process.env.FCM_BRIDGE_SECRET ? `${fcmOrigin()}/login` : '/login');
   return s;
 }
 
@@ -81,6 +86,7 @@ export async function checkPassword(pw: string, hash: string) {
 }
 
 export async function authenticate(username: string, password: string): Promise<SessionUser | null> {
+  if (username.trim().startsWith('fcm:')) return null;
   const u = await queryOne<{ id: number; username: string; name: string; role: Role; password_hash: string; active: boolean }>(
     "SELECT id, username, name, role, password_hash, active FROM users WHERE lower(username) = lower($1)",
     [username.trim()],

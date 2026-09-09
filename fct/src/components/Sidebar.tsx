@@ -40,11 +40,13 @@ export default function Sidebar({
   labels,
   onLogout,
   onToggleLang,
+  workspace,
 }: {
   user: SessionUser;
   labels: Labels;
   onLogout: () => Promise<void>;
   onToggleLang: () => Promise<void>;
+  workspace?: { href: string; label: string };
 }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
@@ -174,6 +176,7 @@ export default function Sidebar({
 
       {/* 메뉴 */}
       <nav className="flex-1 space-y-0.5 px-2 py-3">
+        {workspace && <a href={workspace.href} title={workspace.label} className={`flex items-center gap-3 rounded-md px-2.5 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-100 ${collapsed ? 'justify-center' : ''}`}><NavIcon d="M9 5l-7 7 7 7M2 12h20"/>{!collapsed && <span>{workspace.label}</span>}</a>}
         {items.map((it) => (
           <Link
             key={it.href}

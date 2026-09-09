@@ -1,0 +1,42 @@
+name: Check FCM portal
+on:
+  push:
+    branches: [main]
+    paths: ['fcm/**', '.github/workflows/fcm.yml']
+  pull_request:
+    paths: ['fcm/**', '.github/workflows/fcm.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: devonly
+          POSTGRES_DB: fcm
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d fcm"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    defaults:
+      run:
+        working-directory: fcm
+    env:
+      DATABASE_URL_SUPER: postgres://postgres:devonly@localhost:5432/fcm
+      DATABASE_URL_OWNER: postgres://fcm_owner:devonly@localhost:5432/fcm
+      DATABASE_URL_APP: postgres://fcm_app:devonly@localhost:5432/fcm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: fcm/package-lock.json
+      - run: npm ci
+      - run: npm run db:migrate
+      - run: npm run db:seed
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

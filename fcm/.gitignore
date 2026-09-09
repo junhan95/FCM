@@ -1,0 +1,28 @@
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# 환경변수 — 절대 커밋 금지
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# 개인정보가 포함될 수 있는 파일
+*.xlsx
+*.csv
+!tests/fixtures/*.csv
+uploads/
+dumps/
+*.dump
+*.sql.gz
+
+.DS_Store
+coverage/
+
+# 실행 로그
+*.log

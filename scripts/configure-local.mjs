@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import { randomBytes } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const read = app => {
+  const file = path.join(root, app, '.env');
+  return fs.readFileSync(fs.existsSync(file) ? file : path.join(root, app, '.env.example'), 'utf8');
+};
+const set = (text,key,value) => text.replace(new RegExp(`^${key}=.*(?:\\r?\\n|$)`, 'gm'), '') + `\n${key}=${value}\n`;
+let fcm = read('fcm'), fct = read('fct');
+const existing = /^FCM_BRIDGE_SECRET=(.+)$/m.exec(fcm)?.[1].trim();
+const secret = existing && existing.length >= 32 ? existing : randomBytes(32).toString('hex');
+fcm = set(set(set(fcm, 'FCM_BRIDGE_SECRET', secret), 'FCT_PORT', '3001'), 'COOKIE_SECURE', '0');
+fcm = set(fcm, 'NODE_ENV', 'production');
+fct = set(set(fct, 'FCM_BRIDGE_SECRET', secret), 'FCM_ORIGIN', 'http://127.0.0.1:3002');
+if (!fs.existsSync(path.join(root,'fct','.env'))) fct = set(fct,'SESSION_SECRET',randomBytes(32).toString('hex'));
+fs.writeFileSync(path.join(root,'fcm','.env'),fcm);
+fs.writeFileSync(path.join(root,'fct','.env'),fct);
+console.log('Configured local FCM (3002) and FCT (3001). Existing database settings preserved.');

@@ -4,6 +4,8 @@ Set-Location (Split-Path $PSScriptRoot -Parent)
 function Test-Fct {
   try {
     $health = Invoke-RestMethod "http://127.0.0.1:$Port/api/health" -TimeoutSec 2
+    $integrated = (Test-Path '.env') -and (Select-String -Path '.env' -Pattern '^FCM_BRIDGE_SECRET=.' -Quiet)
+    if ($integrated -and -not $health.fcmIntegration) { return $false }
     return ($health.app -eq 'fct' -and $health.ok -eq $true)
   } catch { return $false }
 }

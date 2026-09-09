@@ -5,6 +5,7 @@ import { getLang } from "@/lib/lang";
 import { makeT } from "@/lib/i18n";
 import { logoutAction, setLangAction } from "./actions/auth";
 import Sidebar from "@/components/Sidebar";
+import { fcmOrigin } from '@/lib/fcm-session';
 
 export const metadata: Metadata = {
   title: "Frankonia Calculation Table",
@@ -29,6 +30,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <>
             <Sidebar
               user={session}
+              workspace={session.authProvider === 'fcm' ? { href: `${fcmOrigin()}/workspace`, label: lang === 'ko' ? '통합 메뉴' : 'Workspace' } : undefined}
               labels={{
                 newProject: t("newProject"),
                 projects: t("projects"),
