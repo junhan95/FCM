@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,26 +8,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header><img src="frankonia-logo.svg" alt="Frankonia"><span>CALCULATION TABLE</span></header>
+  <header><img src="frankonia-logo.svg" alt="Frankonia"><div class="header-tools"><span>CALCULATION TABLE</span><nav class="languages" aria-label="Language"><button type="button" data-lang="en" lang="en" aria-pressed="true">English</button><button type="button" data-lang="ko" lang="ko" aria-pressed="false">한국어</button></nav></div></header>
   <main>
     <p class="eyebrow">FRANKONIA WORKSPACE / FCT</p>
-    <h1>견적 작업을<br>이어가세요.</h1>
-    <p class="intro">챔버 구성부터 최종 견적까지.<br>이 PC에서 실행 중인 Frankonia Calculation Table로 연결합니다.</p>
+    <h1><span data-i18n="headline1">Continue your</span><br><span data-i18n="headline2">quotation.</span></h1>
+    <p class="intro"><span data-i18n="intro1">From chamber configuration to your final quote.</span><br><span data-i18n="intro2">Connect to Frankonia Calculation Table running on this PC.</span></p>
     <section class="launch" aria-labelledby="launch-title">
-      <div><p class="eyebrow">LOCAL APPLICATION</p><h2 id="launch-title">Frankonia Calculation Table</h2><p>앱과 데이터베이스는 이 PC에서 실행됩니다.</p></div>
-      <a id="open-app" class="button" href="http://127.0.0.1:3000/" rel="noreferrer">FCT 열기 <span aria-hidden="true">↗</span></a>
+      <div><p class="eyebrow">LOCAL APPLICATION</p><h2 id="launch-title">Frankonia Calculation Table</h2><p><span data-i18n="local">The app and database run locally on this PC.</span></p></div>
+      <a id="open-app" class="button" href="http://127.0.0.1:3000/" rel="noreferrer"><span data-i18n="open">Open FCT</span> <span aria-hidden="true">↗</span></a>
     </section>
     <section class="instructions" aria-labelledby="help-title">
-      <h2 id="help-title">연결 전 확인하세요</h2>
+      <h2 id="help-title"><span data-i18n="help">Before you connect</span></h2>
       <ol>
-        <li><strong>로컬 앱 실행</strong><p>바탕화면의 Frankonia Calculation Table 아이콘을 실행하세요. 소스 버전은 <code>start-fct.cmd</code>를 실행합니다.</p></li>
-        <li><strong>FCT 열기</strong><p>앱이 준비되면 위 버튼으로 접속하고 로그인하세요. 인터넷 시작 페이지에서 로컬 프로그램을 자동으로 실행할 수는 없습니다.</p></li>
-        <li><strong>연결되지 않는다면</strong><p>앱이 켜져 있는지 확인하세요. 다른 포트에서 실행했다면 아래 포트 번호를 맞춰 주세요.</p></li>
+        <li><strong><span data-i18n="start">Start the local app</span></strong><p><span data-i18n="start1">Open Frankonia Calculation Table from your desktop. For the source version, run </span><code>start-fct.cmd</code><span data-i18n="start2">.</span></p></li>
+        <li><strong><span data-i18n="open">Open FCT</span></strong><p><span data-i18n="ready">Once the app is ready, use the button above to open it and sign in. This page cannot automatically start a program on your PC.</span></p></li>
+        <li><strong><span data-i18n="trouble">Having trouble connecting?</span></strong><p><span data-i18n="troubleText">Check that the app is running. If it uses a different port, update the port number below.</span></p></li>
       </ol>
-      <form id="port-form"><label for="port">로컬 앱 포트</label><div class="port-row"><input id="port" name="port" type="number" min="1024" max="65535" value="3000" required><button type="submit">적용</button></div><p id="address" aria-live="polite">접속 주소: http://127.0.0.1:3000/</p></form>
+      <form id="port-form"><label for="port"><span data-i18n="port">Local app port</span></label><div class="port-row"><input id="port" name="port" type="number" min="1024" max="65535" value="3000" required><button type="submit"><span data-i18n="apply">Apply</span></button></div><p id="address" aria-live="polite">Address: http://127.0.0.1:3000/</p></form>
     </section>
   </main>
-  <footer><span>FRANKONIA · FCT</span><p>견적·가격 데이터는 로컬 앱에서 처리합니다.<br>다른 PC에서 사용하려면 해당 PC에도 앱을 설치해야 합니다.</p></footer>
+  <footer><span>FRANKONIA · FCT</span><p><span data-i18n="footer1">Quotation and pricing data are processed in the local app.</span><br><span data-i18n="footer2">To use FCT on another PC, install the app on that PC as well.</span></p></footer>
   <script src="app.js"></script>
 </body>
 </html>
