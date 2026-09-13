@@ -1,0 +1,24 @@
+name: Check development client entry
+on:
+  push:
+    branches: [main]
+    paths: ['pages/**', 'client-installer/verify-web.mjs', '.github/workflows/portal-entry.yml']
+  pull_request:
+    paths: ['pages/**', 'client-installer/verify-web.mjs', '.github/workflows/portal-entry.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: fct/package-lock.json
+      - run: npm ci
+        working-directory: fct
+      - run: npx playwright install --with-deps chromium
+        working-directory: fct
+      - run: node client-installer/verify-web.mjs

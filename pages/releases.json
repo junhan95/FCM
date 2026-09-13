@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "releases": {
+    "win32-x64": {
+      "version": "1.3.0",
+      "url": "https://www.frankonia-korea.com/fcm-downloads/Frankonia-Client-Setup-Windows-x64-1.3.0.exe",
+      "sha256": "e224aecffb4055467341864feed6943a510af57a89ff445ae377914556ea062d"
+    },
+    "darwin-arm64": {
+      "version": "1.3.0",
+      "url": null,
+      "sha256": null
+    },
+    "darwin-x64": {
+      "version": "1.3.0",
+      "url": null,
+      "sha256": null
+    }
+  }
+}
