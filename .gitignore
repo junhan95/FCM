@@ -10,3 +10,4 @@ fct/data/*.json
 *.xlsx
 *.xls
 *.msg
+client-installer/out/
